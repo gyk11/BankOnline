@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+    <div class="contrain">
+        <p>当前操作：查询交易记录</p>
+        <p>查询日期范围：<input type="date" name="startTime"/>到<input type="date" name="endTime"/></p>
+        <button onclick="getRecord(1)">查询</button>
+        <table id="record">
+
+        </table>
+    </div>
+<script>
+    function getRecord(i){
+        $.ajax({
+            url:"base.do",
+            type:"post",
+            data:{
+                index:i,
+                action:"records",
+                startTime:$("input[name=startTime]").val(),
+                endTime:$("input[name=endTime]").val()
+            },
+            dataType:"json",
+            success:function (data) {
+                $("#record").html("");
+                var thead = "<tr><td>交易日期</td><td>转入</td><td>转出</td><td>交易类型</td><td>备注</td></tr>";
+                if(data.list.length>0){
+                    $("#record").append(thead);
+                    $.each(data.list,function(i,v){
+                        var tr ="<tr><td>"+dataformat(v.transaction_date)+"</td>"
+                            +"<td>"+(v.income?v.income:'')+"</td>"
+                            +"<td>"+(v.expense?v.expense:'')+"</td>"
+                            +"<td>"+(v.transaction_type?v.transaction_type:'')+"</td>"
+                            +"<td>"+(v.remark?v.remark:'')+"</td></tr>";
+                        $("#record").append(tr);
+                    });
+                    var $pagetr = "<tr><td colspan='5'>" +
+                        "<a href='javascript:void(0)' onclick='getRecord(1)'>首页</a>" +
+                        "<a href='javascript:void(0)' onclick='getRecord("+(data.index-1)+")'>上一页</a>" +
+                        "<a href='javascript:void(0)' onclick='getRecord("+(data.index+1)+")'>下一页</a>" +
+                        "<a href='javascript:void(0)' onclick='getRecord("+data.page+")'>末页</a>" +
+                        "<span>第"+data.index+"页//共"+data.page+"页（"+data.total+"条记录）</span></td></tr>";
+                    $("#record").append($pagetr);
+                }else{
+                    $("#record").html("当前没有记录")
+                }
+                console.log(data);
+            }
+        })
+    }
+    function dataformat (obj) {
+        var d = new Date(obj);
+        return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"
+    }
+</script>
+</body>
+</html>

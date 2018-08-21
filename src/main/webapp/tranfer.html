@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+    <div>
+        <h3>当前操作转账</h3>
+        <form>
+            <p>转入帐号：<input name="toaccount"/></p>
+            <p>金额：<input name="money"/></p>
+            <p><input type="button" value="转账" onclick="tranfer()"/></p>
+        </form>
+        <div class="msg"></div>
+    </div>
+    <script>
+        function tranfer() {
+            $.ajax({
+                url:"base.do",
+                data:{
+                    action:"tranfer",
+                    toCardno:$("input[name=toaccount]").val(),
+                    money:$("input[name=money]").val()
+                },
+                type:"post",
+                dataType:"text",
+                success:function (data) {
+                    if (data==1){
+                        alert("转账成功")
+                    }else{
+                        $(".msg").html(data);
+                    }
+                }
+            })
+        }
+
+
+    </script>
+</body>
+</html>

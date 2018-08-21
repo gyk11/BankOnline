@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+    <div>
+        <h3>当前操作：修改密码</h3>
+        <p>请输入现有密码：<input type="password" name="oldpass"></p>
+        <p>请输入新密码：<input type="password" name="newpass"></p>
+        <p>请重新输入新密码：<input type="password" name="renewpass"></p>
+        <button onclick="modified()">修改</button>
+    </div>
+    <span class="msg"></span>
+<script>
+    function modified() {
+        $.ajax({
+            url:"base.do",
+            data:{
+                action:"modified",
+                oldPass:$("input[name=oldpass]").val(),
+                newPass:$("input[name=newpass]").val()
+            },
+            type:"post",
+            dataType:"text",
+            success:function (data) {
+                if(data==1){
+                    alert("修改成功");
+                }else{
+                    $(".msg").html(data);
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

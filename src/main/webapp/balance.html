@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+    您的帐户余额是：
+        人民币：<span class="money"></span>元
+    <script>
+        $(function () {
+            $.ajax({
+                url:"base.do",
+                type:"post",
+                data:{
+                    action:"getBalance"
+                },
+                dataType:"text",
+                success:function(data){
+                    $(".money").html(data);
+                }
+            })
+        })
+    </script>
+</body>
+</html>
